@@ -3,8 +3,15 @@ package com.ritterdouglas.calendar
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import android.widget.TextView
+import com.google.gson.Gson
+import com.ritterdouglas.calendar.data.CalendarGenerator
+import com.ritterdouglas.calendar.data.Month
+import com.ritterdouglas.calendar.data.Year
+import com.ritterdouglas.calendar.ui.adapter.CalendarAdapter
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.DateFormat
@@ -15,63 +22,44 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val TAG = MainActivity::class.java.simpleName
-        val DAYS_OF_WEEK = "days_of_week"
-        val DAY_FORMAT = "EEE"
-        val MONTH_NAME = "month_name"
-        val MONTHS = "months"
-        val DAYS = "days"
-        val STARTS_AT = "starts_at"
-        val MONTH = "month"
     }
 
-    val calendarView by lazy { findViewById(R.id.calendarView) as MaterialCalendarView? }
+    val day1 by lazy { findViewById(R.id.weekDay1) as TextView? }
+    val day2 by lazy { findViewById(R.id.weekDay2) as TextView? }
+    val day3 by lazy { findViewById(R.id.weekDay3) as TextView? }
+    val day4 by lazy { findViewById(R.id.weekDay4) as TextView? }
+    val day5 by lazy { findViewById(R.id.weekDay5) as TextView? }
+    val day6 by lazy { findViewById(R.id.weekDay6) as TextView? }
+    val day7 by lazy { findViewById(R.id.weekDay7) as TextView? }
+    val calendarRecyclerView by lazy { findViewById(R.id.calendarRecyclerView) as RecyclerView? }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        generateCalendar(2017)
+        calendarRecyclerView?.layoutManager = LinearLayoutManager(this)
+
+        val data = CalendarGenerator.generateGsonCalendar(2017)
+        val year = Gson().fromJson(data.toString(), Year::class.java)
+
+        Log.e(TAG, "data from calendar generator: \n ${year.toString()}")
+        bindDays(year.daysOfWeek)
+        bindDataToAdapter(year.months)
 
     }
 
-    @SuppressLint("SimpleDateFormat")
-    fun generateCalendar(year: Int) {
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.YEAR, year)
-        val monthsJson = JSONArray()
-
-        for (currentMonth in Calendar.JANUARY..Calendar.DECEMBER) {
-            calendar.set(Calendar.DAY_OF_MONTH, 1)
-            calendar.set(Calendar.MONTH, currentMonth)
-
-            val numDays = calendar.getActualMaximum(Calendar.DATE)
-            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-
-            val days = JSONArray()
-            for (i in 1..numDays) days.put(i)
-
-            val currentMonthJson = JSONObject()
-                    .put(MONTH_NAME, calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()))
-                    .put(MONTH, calendar.get(Calendar.MONTH))
-                    .put(DAYS, days)
-                    .put(STARTS_AT, dayOfWeek)
-
-            monthsJson.put(currentMonthJson)
-
-        }
-        val daysOfWeek = JSONArray()
-        for (day in Calendar.SUNDAY..Calendar.SATURDAY) {
-            calendar.set(Calendar.DAY_OF_WEEK, day)
-            daysOfWeek.put(JSONObject().put(day.toString(), SimpleDateFormat(DAY_FORMAT).format(calendar.time)))
-        }
-
-        val yearJson = JSONObject()
-                .put(DAYS_OF_WEEK, daysOfWeek)
-                .put(MONTHS, monthsJson)
-
-        Log.e(TAG, "Calendar result: $yearJson")
-
+    fun bindDays(days: List<Pair<String, String>>) {
+        day1?.text = days.get(0).second
+        day2?.text = days.get(1).second
+        day3?.text = days.get(2).second
+        day4?.text = days.get(3).second
+        day5?.text = days.get(4).second
+        day6?.text = days.get(5).second
+        day7?.text = days.get(6).second
     }
 
+    fun bindDataToAdapter(data: List<Month>) {
+        calendarRecyclerView?.adapter = CalendarAdapter(this, data)
+    }
 
 }
