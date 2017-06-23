@@ -45,6 +45,7 @@ class CalendarAdapter(context: Context, data: List<Month>) : RecyclerView.Adapte
     }
 
     private fun configureCalendarViewHolder(viewHolder: CalendarViewHolder, position: Int) {
+        viewHolder.gridView.isExpanded = true
         viewHolder.gridView.adapter = GridAdapter(mData[position])
     }
 

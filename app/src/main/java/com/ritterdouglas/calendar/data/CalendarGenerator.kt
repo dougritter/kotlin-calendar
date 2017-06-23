@@ -74,7 +74,7 @@ object CalendarGenerator {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
 
-        var monthsList: MutableList<Month> = arrayListOf()
+        val monthsList: MutableList<Month> = arrayListOf()
         for (currentMonth in Calendar.JANUARY..Calendar.DECEMBER) {
             calendar.set(Calendar.DAY_OF_MONTH, 1)
             calendar.set(Calendar.MONTH, currentMonth)
@@ -93,7 +93,7 @@ object CalendarGenerator {
 
         }
 
-        var daysOfWeek: MutableList<Pair<String, String>> = arrayListOf()
+        val daysOfWeek: MutableList<Pair<String, String>> = arrayListOf()
 
         for (day in Calendar.SUNDAY..Calendar.SATURDAY) {
             calendar.set(Calendar.DAY_OF_WEEK, day)
@@ -107,13 +107,28 @@ object CalendarGenerator {
         return jsonResult
 
     }
+
+    fun addGhostDays(data: Year) {
+        for (currentMonth in 0..data.months.size-1) {
+            val auxDays: MutableList<Int> = arrayListOf()
+            if (data.months[currentMonth].startsAt > 1) {
+                for (ghost in 0..data.months[currentMonth].startsAt-2) auxDays.add(-1)
+                (0..data.months[currentMonth].days.size-1).mapTo(auxDays) { data.months[currentMonth].days[it] }
+
+                data.months[currentMonth].days = auxDays
+            }
+
+        }
+
+    }
+
 }
 
 
 data class Month(val year: Int,
                  val monthName: String,
                  val month: Int,
-                 val days: List<Int>,
+                 var days: List<Int>,
                  val startsAt: Int)
 
 data class Year(val daysOfWeek: List<Pair<String, String>>,

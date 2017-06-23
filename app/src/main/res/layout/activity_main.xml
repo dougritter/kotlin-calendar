@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3eb6e9"
+    android:background="@drawable/bg_gradient_main"
     tools:context="com.ritterdouglas.calendar.MainActivity">
 
     <LinearLayout
         android:id="@+id/moveInOutContainer"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:gravity="center"
         android:orientation="horizontal">
+        
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/moveInButton"
+            android:text="@string/move_in"
+            style="@style/AppTheme.MoveInOutButtons"
+            android:layout_width="166dp"
+            android:layout_height="55dp"
+            android:background="@drawable/button_move_in"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/moveOutButton"
+            android:text="@string/move_out"
+            style="@style/AppTheme.MoveInOutButtons"
+            android:layout_width="166dp"
+            android:layout_height="55dp"
+            android:background="@drawable/button_move_out"/>
 
     </LinearLayout>
 
@@ -30,9 +46,17 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/daysContainer"
+        android:background="@android:color/white"
+        android:alpha="0.3"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/calendarRecyclerView"
-        android:layout_below="@id/daysContainer"
+        android:layout_below="@id/separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>

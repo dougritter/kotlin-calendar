@@ -12,17 +12,16 @@ import com.ritterdouglas.calendar.data.CalendarGenerator
 import com.ritterdouglas.calendar.data.Month
 import com.ritterdouglas.calendar.data.Year
 import com.ritterdouglas.calendar.ui.adapter.CalendarAdapter
+import com.ritterdouglas.calendar.ui.presenter.MainPresenter
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView {
 
-    companion object {
-        val TAG = MainActivity::class.java.simpleName
-    }
+    companion object { val TAG = MainActivity::class.java.simpleName }
 
     val day1 by lazy { findViewById(R.id.weekDay1) as TextView? }
     val day2 by lazy { findViewById(R.id.weekDay2) as TextView? }
@@ -33,22 +32,21 @@ class MainActivity : AppCompatActivity() {
     val day7 by lazy { findViewById(R.id.weekDay7) as TextView? }
     val calendarRecyclerView by lazy { findViewById(R.id.calendarRecyclerView) as RecyclerView? }
 
+    lateinit var presenter: MainPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         calendarRecyclerView?.layoutManager = LinearLayoutManager(this)
 
-        val data = CalendarGenerator.generateGsonCalendar(2017)
-        val year = Gson().fromJson(data.toString(), Year::class.java)
-
-        Log.e(TAG, "data from calendar generator: \n ${year.toString()}")
-        bindDays(year.daysOfWeek)
-        bindDataToAdapter(year.months)
+        presenter = MainPresenter()
+        presenter.mainView = this
+        presenter.init()
 
     }
 
-    fun bindDays(days: List<Pair<String, String>>) {
+    override fun bindDays(days: List<Pair<String, String>>) {
         day1?.text = days.get(0).second
         day2?.text = days.get(1).second
         day3?.text = days.get(2).second
@@ -58,8 +56,13 @@ class MainActivity : AppCompatActivity() {
         day7?.text = days.get(6).second
     }
 
-    fun bindDataToAdapter(data: List<Month>) {
+    override fun bindDataToAdapter(data: List<Month>) {
         calendarRecyclerView?.adapter = CalendarAdapter(this, data)
     }
 
+}
+
+interface MainView {
+    fun bindDays(days: List<Pair<String, String>>)
+    fun bindDataToAdapter(data: List<Month>)
 }

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.GridView
 import com.ritterdouglas.calendar.R
+import com.ritterdouglas.calendar.ui.custom_view.ExpandableHeightGridView
 import kotlinx.android.synthetic.main.item_calendar.*
 
 /**
@@ -12,5 +13,5 @@ import kotlinx.android.synthetic.main.item_calendar.*
 
 class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val gridView by lazy { itemView.findViewById(R.id.calendarGridView) as GridView }
+    val gridView by lazy { itemView.findViewById(R.id.calendarGridView) as ExpandableHeightGridView }
 }

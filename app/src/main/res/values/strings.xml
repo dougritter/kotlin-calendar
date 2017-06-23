@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Calendar</string>
+    <string name="move_in">Move-In</string>
+    <string name="move_out">Move-Out</string>
 </resources>
