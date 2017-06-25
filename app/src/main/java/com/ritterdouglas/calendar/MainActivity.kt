@@ -1,23 +1,18 @@
 package com.ritterdouglas.calendar
 
-import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
+import android.view.View
 import android.widget.TextView
-import com.google.gson.Gson
-import com.ritterdouglas.calendar.data.CalendarGenerator
 import com.ritterdouglas.calendar.data.Month
-import com.ritterdouglas.calendar.data.Year
 import com.ritterdouglas.calendar.ui.adapter.CalendarAdapter
 import com.ritterdouglas.calendar.ui.presenter.MainPresenter
-import org.json.JSONArray
-import org.json.JSONObject
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import com.ritterdouglas.calendar.ui.custom_view.DatePickerFragment
+
+
 
 class MainActivity : AppCompatActivity(), MainView {
 
@@ -30,6 +25,10 @@ class MainActivity : AppCompatActivity(), MainView {
     val day5 by lazy { findViewById(R.id.weekDay5) as TextView? }
     val day6 by lazy { findViewById(R.id.weekDay6) as TextView? }
     val day7 by lazy { findViewById(R.id.weekDay7) as TextView? }
+
+    val moveInButton by lazy { findViewById(R.id.moveInButton) as AppCompatButton? }
+    val moveOutButton by lazy { findViewById(R.id.moveOutButton) as AppCompatButton? }
+
     val calendarRecyclerView by lazy { findViewById(R.id.calendarRecyclerView) as RecyclerView? }
 
     lateinit var presenter: MainPresenter
@@ -44,6 +43,14 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.mainView = this
         presenter.init()
 
+        moveInButton?.setOnClickListener(this::showDatePickerDialog)
+        moveOutButton?.setOnClickListener(this::showDatePickerDialog)
+
+    }
+
+    fun showDatePickerDialog(v: View) {
+        val newFragment = DatePickerFragment()
+        newFragment.show(supportFragmentManager, "datePicker")
     }
 
     override fun bindDays(days: List<Pair<String, String>>) {
@@ -60,9 +67,14 @@ class MainActivity : AppCompatActivity(), MainView {
         calendarRecyclerView?.adapter = CalendarAdapter(this, data)
     }
 
+    override fun setCurrentDay(year: Int, month: Int, day: Int) {
+        ((calendarRecyclerView?.adapter) as CalendarAdapter).setCurrentDay(year, month, day)
+    }
+
 }
 
 interface MainView {
     fun bindDays(days: List<Pair<String, String>>)
     fun bindDataToAdapter(data: List<Month>)
+    fun setCurrentDay(year: Int, month: Int, day: Int)
 }

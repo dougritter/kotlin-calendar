@@ -6,11 +6,11 @@
     <com.ritterdouglas.calendar.ui.custom_view.ExpandableHeightGridView
         android:id="@+id/calendarGridView"
         android:layout_width="match_parent"
-        android:layout_height="142dp"
+        android:layout_height="200dp"
         android:layout_marginTop="10dp"
         android:paddingLeft="9dp"
         android:numColumns="7"
-        android:verticalSpacing="14dp"
+        android:verticalSpacing="30dp"
         android:gravity="center"/>
 
 </RelativeLayout>

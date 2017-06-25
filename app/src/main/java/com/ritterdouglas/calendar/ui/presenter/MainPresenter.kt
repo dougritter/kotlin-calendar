@@ -6,6 +6,7 @@ import com.ritterdouglas.calendar.MainActivity
 import com.ritterdouglas.calendar.MainView
 import com.ritterdouglas.calendar.data.CalendarGenerator
 import com.ritterdouglas.calendar.data.Year
+import java.util.*
 
 /**
  * Created by douglasritter on 23/06/17.
@@ -23,6 +24,15 @@ class MainPresenter {
         mainView?.bindDays(year.daysOfWeek)
         CalendarGenerator.addGhostDays(year)
         mainView?.bindDataToAdapter(year.months)
+    }
+
+    fun setCurrentDay() {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        mainView.setCurrentDay(year, month, day)
     }
 
 }

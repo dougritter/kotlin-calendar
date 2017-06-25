@@ -7,6 +7,14 @@
     android:background="@drawable/bg_gradient_main"
     tools:context="com.ritterdouglas.calendar.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:theme="@style/CustomActionBar"/>
+
     <LinearLayout
         android:id="@+id/moveInOutContainer"
         android:layout_width="match_parent"
