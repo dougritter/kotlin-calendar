@@ -48,6 +48,11 @@ class MainActivity : AppCompatActivity(), MainView {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.setCurrentDay()
+    }
+
     fun showDatePickerDialog(v: View) {
         val newFragment = DatePickerFragment()
         newFragment.show(supportFragmentManager, "datePicker")
@@ -68,7 +73,8 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun setCurrentDay(year: Int, month: Int, day: Int) {
-        ((calendarRecyclerView?.adapter) as CalendarAdapter).setCurrentDay(year, month, day)
+        val adapter = (calendarRecyclerView?.adapter) as CalendarAdapter
+        calendarRecyclerView?.layoutManager?.scrollToPosition(adapter.getMonthForCurrentDay(year, month, day))
     }
 
 }

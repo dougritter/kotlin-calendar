@@ -77,10 +77,13 @@ class CalendarAdapter(context: Context, data: List<Month>) : RecyclerView.Adapte
         return doubleMonths
     }
 
-    fun setCurrentDay(year: Int, month: Int, day: Int) {
-        if (itemCount > 0) {
-
+    fun getMonthForCurrentDay(year: Int, month: Int, day: Int): Int {
+        var position = 0
+        if (mData.size >= month) {
+            for (i in 0..mData.size-1)
+                if (mData[i].month == month) position = i
         }
+        return position
     }
 
 }
