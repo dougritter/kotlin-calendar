@@ -149,15 +149,6 @@ class CalendarAdapter(context: Context, data: List<Month>) : RecyclerView.Adapte
             }
         }
 
-
-//        val monthIndex = (0..mData.size-1).lastOrNull { mData[it].month == month } ?: 0
-
-
-
-        /*var actualDayNumber = mData[monthIndex].startsAt
-        if (actualDayNumber >= 1) actualDayNumber -= 2
-        mData[monthIndex].days[day + actualDayNumber].selection = DaySelection.SINGLE*/
-
         notifyDataSetChanged()
 
     }
