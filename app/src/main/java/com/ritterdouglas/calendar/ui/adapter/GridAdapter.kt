@@ -23,6 +23,8 @@ class GridAdapter(data: Month) : BaseAdapter() {
 
     val mData = data
 
+    override fun isEnabled(position: Int) = false
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val textView: TextView
 
