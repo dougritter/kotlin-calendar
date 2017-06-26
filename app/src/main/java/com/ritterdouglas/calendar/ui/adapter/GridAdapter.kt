@@ -65,8 +65,6 @@ class GridAdapter(data: Month) : BaseAdapter() {
                     singleSelection.visibility = View.VISIBLE
                 }
             }
-        } else {
-            dayNumber.text = ""
         }
 
 
