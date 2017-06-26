@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import com.ritterdouglas.calendar.data.Month
 import android.view.LayoutInflater
 import com.ritterdouglas.calendar.R
+import com.ritterdouglas.calendar.data.DaySelection
 import com.ritterdouglas.calendar.ui.view_holder.CalendarViewHolder
-import com.ritterdouglas.calendar.ui.view_holder.HeaderDaysViewHolder
 import com.ritterdouglas.calendar.ui.view_holder.HeaderTitleViewHolder
+import java.util.*
 
 
 /**
@@ -81,9 +82,84 @@ class CalendarAdapter(context: Context, data: List<Month>) : RecyclerView.Adapte
         var position = 0
         if (mData.size >= month) {
             for (i in 0..mData.size-1)
-                if (mData[i].month == month) position = i
+                if (mData[i].month == month) {
+                    position = i
+                    break
+                }
         }
         return position
+    }
+
+    fun moveInSelected(moveInDate: Long) {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = moveInDate
+
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val monthIndex = (0..mData.size-1).lastOrNull { mData[it].month == month } ?: 0
+
+        var actualDayNumber = mData[monthIndex].startsAt
+        if (actualDayNumber >= 1) actualDayNumber -= 2
+        mData[monthIndex].days[day + actualDayNumber].selection = DaySelection.SINGLE
+
+        notifyDataSetChanged()
+
+    }
+
+    fun moveOutSelected(moveInDate: Long, moveOutDate: Long) {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = moveInDate
+
+        val monthIn = calendar.get(Calendar.MONTH)
+        val dayIn = calendar.get(Calendar.DAY_OF_MONTH)
+
+        calendar.timeInMillis = moveOutDate
+        val monthOut = calendar.get(Calendar.MONTH)
+        val dayOut = calendar.get(Calendar.DAY_OF_MONTH)
+
+        for (i in 0..mData.size-1) {
+            if (mData[i].month in monthIn..monthOut) {
+
+                val currentMonth = mData[i]
+                for ((dayNumber) in currentMonth.days) {
+                    var actualDayNumber = currentMonth.startsAt
+                    if (actualDayNumber >= 1) actualDayNumber -= 2
+
+                    if (currentMonth.month == monthIn && currentMonth.month == monthOut) {
+                        if (dayNumber == dayIn) currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.RIGHT
+                        else if (dayNumber == dayOut) currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.LEFT
+                        else if (dayNumber > dayIn && dayNumber < dayOut) currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.FULL
+                    }
+
+                    else if (currentMonth.month == monthIn) {
+                        if (dayNumber == dayIn) currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.RIGHT
+                        else if (dayNumber > dayIn) currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.FULL
+                    }
+
+                    else if (currentMonth.month == monthOut) {
+                        if (dayNumber == dayOut) currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.LEFT
+                        else if (dayNumber < dayOut) currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.FULL
+                    }
+
+                    else currentMonth.days[dayNumber + actualDayNumber].selection = DaySelection.FULL
+
+                }
+
+            }
+        }
+
+
+//        val monthIndex = (0..mData.size-1).lastOrNull { mData[it].month == month } ?: 0
+
+
+
+        /*var actualDayNumber = mData[monthIndex].startsAt
+        if (actualDayNumber >= 1) actualDayNumber -= 2
+        mData[monthIndex].days[day + actualDayNumber].selection = DaySelection.SINGLE*/
+
+        notifyDataSetChanged()
+
     }
 
 }

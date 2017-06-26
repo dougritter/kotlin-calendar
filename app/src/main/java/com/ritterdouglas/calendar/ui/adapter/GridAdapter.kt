@@ -10,6 +10,7 @@ import android.widget.BaseAdapter
 import com.ritterdouglas.calendar.data.Month
 import android.widget.TextView
 import com.ritterdouglas.calendar.R
+import com.ritterdouglas.calendar.data.DaySelection
 
 
 /**
@@ -39,8 +40,33 @@ class GridAdapter(data: Month) : BaseAdapter() {
         val rightSelection = dayView.findViewById(R.id.rightSelection)
 
         val day = mData.days[position]
-        dayNumber.text = if (day.dayNumber >= 0) day.dayNumber.toString() else ""
-        if (day.passedDay) dayNumber.alpha = 0.4f
+
+        if (day.dayNumber > 0) {
+            dayNumber.text = day.dayNumber.toString()
+            if (day.passedDay) dayNumber.alpha = 0.4f
+
+            if (day.selection != DaySelection.NONE) dayNumber.setTextColor(ContextCompat.getColor(dayView.context, android.R.color.black))
+
+            when (day.selection) {
+                DaySelection.SINGLE -> { singleSelection.visibility = View.VISIBLE }
+                DaySelection.LEFT -> {
+                    singleSelection.visibility = View.VISIBLE
+                    leftSelection.visibility = View.VISIBLE
+                }
+                DaySelection.RIGHT -> {
+                    singleSelection.visibility = View.VISIBLE
+                    rightSelection.visibility = View.VISIBLE
+                }
+                DaySelection.FULL -> {
+                    leftSelection.visibility = View.VISIBLE
+                    rightSelection.visibility = View.VISIBLE
+                    singleSelection.visibility = View.VISIBLE
+                }
+            }
+        } else {
+            dayNumber.text = ""
+        }
+
 
         return dayView
     }

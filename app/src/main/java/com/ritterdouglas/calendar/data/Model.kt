@@ -4,11 +4,11 @@ package com.ritterdouglas.calendar.data
  * Created by douglasritter on 25/06/17.
  */
 
-enum class DaySelection { NONE, SINGLE, LEFT, RIGHT }
+enum class DaySelection { NONE, SINGLE, LEFT, RIGHT, FULL }
 
 data class Day(val dayNumber: Int,
                val passedDay: Boolean,
-               val selection: DaySelection)
+               var selection: DaySelection)
 
 data class Month(val year: Int,
                  val monthName: String,

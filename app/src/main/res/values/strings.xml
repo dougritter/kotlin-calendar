@@ -2,4 +2,5 @@
     <string name="app_name">Calendar</string>
     <string name="move_in">Move-In</string>
     <string name="move_out">Move-Out</string>
+    <string name="error.moveout_not_allowed">Necessary set a move in date first</string>
 </resources>
